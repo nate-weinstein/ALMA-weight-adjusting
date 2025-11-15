@@ -72,9 +72,9 @@ def var_vis(file,uvwidth=30,collapse=False,realimag=False):
                         weight[iuv,ifreq,1]=1/np.std(imag[w,ifreq][s][wf][:nclose])**2
         else:
             #print iuv,wf.sum(),np.sqrt(u[iuv]**2+v[iuv]**2)*klam
-            print 'Not enough vis points near uv={:0.2f} klam. Only found {:0.0f} nearby points when {:0.0f} are needed'.format(np.sqrt(u[iuv]**2+v[iuv]**2)*klam,wf.sum(),nclose+1)
+            print('Not enough vis points near uv={:0.2f} klam. Only found {:0.0f} nearby points when {:0.0f} are needed'.format(np.sqrt(u[iuv]**2+v[iuv]**2)*klam,wf.sum(),nclose+1))
 
-    print 'Elapsed time (hrs): ',(time.time()-start)/3600.
+    print('Elapsed time (hrs): ',(time.time()-start)/3600.)
 
 
     return weight
@@ -138,8 +138,8 @@ def var_vis_cont(file,uvwidth=30,collapse=False,realimag=False):
                 weight[iuv,0] = 1/np.std(real[w][s][wf][:nclose])**2 
                 weight[iuv,1] = 1/np.std(imag[w][s][wf][:nclose])**2 
         else:
-            print 'Not enough vis points at uv={:0.2f}klam. Only found {:0.0f} nearby points when {:0.0f} are needed'.format(np.sqrt(u[iuv]**2+v[iuv]**2)*klam,wf.sum(),nclose+1)
-    print 'Elapsed time (hrs): ',(time.time()-start)/3600.
+            print('Not enough vis points at uv={:0.2f}klam. Only found {:0.0f} nearby points when {:0.0f} are needed'.format(np.sqrt(u[iuv]**2+v[iuv]**2)*klam,wf.sum(),nclose+1))
+    print('Elapsed time (hrs): ',(time.time()-start)/3600.)
 
     return weight
 
