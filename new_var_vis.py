@@ -17,6 +17,16 @@ def new_var_vis(file,collapse=False,realimag=False):
     u,v = fits_file[0].data['UU'],fits_file[0].data['VV']
     freq0 = fits_file[0].header['crval4']
     klam = freq0/1e3
-    
+
     vis = (fits_file[0].data['data']).squeeze()
-    
+    fits_file.close()
+
+    import time
+    start=time.time()
+    weight = np.zeros((u.size(),(vis.shape)[1],2))
+    chi = 0
+    for i in range():
+        chi += ((vis[:,i,0,0]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,0,1]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,1,0]**2)*vis[:,i,1,2]).sum() + ((vis[:,i,1,1]**2)*vis[:,i,1,2]).sum()
+    red_chi = chi/(len(vis[:])*4)
+    print('Reduced chi square = ' + str(red_chi))
+    print('Elapsed time (hrs): ',(time.time()-start)/3600.)
