@@ -186,3 +186,6 @@ def add_weight_to_vis(file,weight,binned=False):
 
 
     vis.writeto(file,clobber=True)
+
+weights=var_vis('filename.fits')
+add_weight_to_vis('filename.fits',weights)
