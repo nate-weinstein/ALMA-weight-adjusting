@@ -12,7 +12,9 @@ def new_var_vis(file,collapse=False,realimag=False):
     ''' 
     from astropy.io import fits
     import numpy as np
+
     fits_file = fits.open(file)
+    
     #u,v = fits_file[0].data['UU'],fits_file[0].data['VV']
     #freq0 = fits_file[0].header['crval4']
     #klam = freq0/1e3
@@ -27,15 +29,29 @@ def new_var_vis(file,collapse=False,realimag=False):
     for i in range():
         chi += ((vis[:,i,0,0]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,0,1]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,1,0]**2)*vis[:,i,1,2]).sum() + ((vis[:,i,1,1]**2)*vis[:,i,1,2]).sum()
     red_chi = chi/(len(vis[:])*2*2*vis[0,:,0,0].size())
-
+    
     file1 = open("new_var_vis_output.txt","w")
     file1.write('Chi square = ',str(chi))
     file1.write('Reduced chi square = ',str(red_chi))
     file1.write('Elapsed time (hrs): ',(time.time()-start)/3600.)
     file1.close()
 
+    return red_chi
 
-weights=new_var_vis('filename.fits')  #Can edit this file name in vim on the cluster
+def adjust_weights(file,red_chi,collapse=False,realimag=False):
+    from astropy.io import fits
+    import numpy as np
+
+    fits_file = fits.open(file)
+    #vis = (fits_file[0].data['data']).squeeze()
+    fits_file[:,0,0,0,:,:,2]/=red_chi
+    fits_file.close()
+
+    
+
+red_chi=new_var_vis('filename.fits')
+adjust_weights('filename.fits',red_chi)
+#Can edit this file name in vim on the cluster
 #Write to a file instead of printing the chi square, reduced chi square, etc
 #Use screen to run in background on cluster
 #Run this all in ipython: %run new_var_vis
