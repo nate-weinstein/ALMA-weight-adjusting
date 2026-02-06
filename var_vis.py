@@ -1,4 +1,5 @@
 def var_vis(file,uvwidth=30,collapse=False,realimag=False):
+    # Here is a comment
     ''' Calculate the weight based on the variance in a visibility map at each u,v point and each channel. The codes estimate the variance among the 50 closest uv-points in a limited range in uv-space. 
 
     :param file:
