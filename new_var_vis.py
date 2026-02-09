@@ -14,17 +14,12 @@ def new_var_vis(file,collapse=False,realimag=False):
     import numpy as np
 
     fits_file = fits.open(file)
-    
-    #u,v = fits_file[0].data['UU'],fits_file[0].data['VV']
-    #freq0 = fits_file[0].header['crval4']
-    #klam = freq0/1e3
 
     vis = (fits_file[0].data['data']).squeeze()
     fits_file.close()
 
     import time
     start=time.time()
-    #weight = np.zeros((u.size(),(vis.shape)[1],2))
     chi = 0
     for i in range():
         chi += ((vis[:,i,0,0]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,0,1]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,1,0]**2)*vis[:,i,1,2]).sum() + ((vis[:,i,1,1]**2)*vis[:,i,1,2]).sum()
@@ -38,16 +33,15 @@ def new_var_vis(file,collapse=False,realimag=False):
 
     return red_chi
 
-def adjust_weights(file,red_chi,collapse=False,realimag=False):
+def adjust_weights(file,red_chi):
     from astropy.io import fits
     import numpy as np
 
     fits_file = fits.open(file)
-    #vis = (fits_file[0].data['data']).squeeze()
+    vis = fits_file[0].data['data']
     fits_file[:,0,0,0,:,:,2]/=red_chi
     fits_file.close()
 
-    
 
 red_chi=new_var_vis('HD152989_Aug23_23Chan.fits')
 #adjust_weights('filename.fits',red_chi)
