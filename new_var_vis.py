@@ -49,8 +49,8 @@ def adjust_weights(file,red_chi,collapse=False,realimag=False):
 
     
 
-red_chi=new_var_vis('filename.fits')
-adjust_weights('filename.fits',red_chi)
+red_chi=new_var_vis('HD152989_Aug23_23Chan.fits')
+#adjust_weights('filename.fits',red_chi)
 #Can edit this file name in vim on the cluster
 #Write to a file instead of printing the chi square, reduced chi square, etc
 #Use screen to run in background on cluster
