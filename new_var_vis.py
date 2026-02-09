@@ -21,14 +21,14 @@ def new_var_vis(file,collapse=False,realimag=False):
     import time
     start=time.time()
     chi = 0
-    for i in range():
+    for i in range(len(vis[0,:])):
         chi += ((vis[:,i,0,0]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,0,1]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,1,0]**2)*vis[:,i,1,2]).sum() + ((vis[:,i,1,1]**2)*vis[:,i,1,2]).sum()
-    red_chi = chi/(len(vis[:])*2*2*vis[0,:,0,0].size())
+    red_chi = chi/(len(vis[:])*2*2*len(vis[0,:,0,0]))
     
     file1 = open("new_var_vis_output.txt","w")
-    file1.write('Chi square = ',str(chi))
-    file1.write('Reduced chi square = ',str(red_chi))
-    file1.write('Elapsed time (hrs): ',(time.time()-start)/3600.)
+    file1.write('Chi square = '+str(chi))
+    file1.write('Reduced chi square = '+str(red_chi))
+    file1.write('Elapsed time (hrs): '+str((time.time()-start)/3600.))
     file1.close()
 
     return red_chi
@@ -38,13 +38,12 @@ def adjust_weights(file,red_chi):
     import numpy as np
 
     fits_file = fits.open(file)
-    vis = fits_file[0].data['data']
-    fits_file[:,0,0,0,:,:,2]/=red_chi
+    fits_file[0].data['data'][:,0,0,0,:,:,2]/=red_chi
     fits_file.close()
 
 
-red_chi=new_var_vis('HD152989_Aug23_23Chan.fits')
-#adjust_weights('filename.fits',red_chi)
+red_chi=new_var_vis('f1_HD36546_data.uvfits')
+#adjust_weights('f1_HD36546_data.uvfits',red_chi)
 #Can edit this file name in vim on the cluster
 #Write to a file instead of printing the chi square, reduced chi square, etc
 #Use screen to run in background on cluster
