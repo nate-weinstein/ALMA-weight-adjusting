@@ -18,13 +18,16 @@ def new_var_vis(file,collapse=False):
     chi = 0
     if collapse:
         chi += ((vis[i,0,0]**2)*vis[:,0,2]).sum() + ((vis[:,0,1]**2)*vis[:,0,2]).sum() + ((vis[:,1,0]**2)*vis[:,1,2]).sum() + ((vis[:,1,1]**2)*vis[:,1,2]).sum()
-        print(np.shape(vis[:,:,2]),np.shape(vis[:,:,2]!=0))
+        if np.shape(vis[:,:,2]) > np.shape(vis[:,:,2]!=0): #Will happen with weights of zero as well, which usually are due to u or v =0 (unphysical points)
+            print("Alert: Non-positive weights in data set")
         n_els=len(np.ravel(vis[:,:,2]!=0))
     else:
         for i in range(len(vis[0,:])):
             chi += ((vis[:,i,0,0]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,0,1]**2)*vis[:,i,0,2]).sum() + ((vis[:,i,1,0]**2)*vis[:,i,1,2]).sum() + ((vis[:,i,1,1]**2)*vis[:,i,1,2]).sum()
-        print(np.shape(vis[:,:,:,2]),np.shape(vis[:,:,:,2]!=0))
+        if np.shape(vis[:,:,:,2]) > np.shape(vis[:,:,:,2]!=0):
+            print("Alert: Non-positive weights in data set")
         n_els=len(np.ravel(vis[:,:,:,2]!=0))
+
     red_chi = chi/(2*n_els)
 
     return red_chi
