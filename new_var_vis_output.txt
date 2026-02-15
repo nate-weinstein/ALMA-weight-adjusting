@@ -1,1 +1,0 @@
-Chi square = 3956627.9296875Reduced chi square = 0.9999999822291861Elapsed time (hrs): 2.068618933359782e-05
