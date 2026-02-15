@@ -53,9 +53,5 @@ def adjust_weights(file,red_chi,collapse=False):
     fits_file.close()
     
 
-red_chi=new_var_vis('f1_HD36546_data.uvfits')
-#adjust_weights('f1_HD36546_data.uvfits',red_chi)
-#Can edit this file name in vim on the cluster
-#Write to a file instead of printing the chi square, reduced chi square, etc
-#Use screen to run in background on cluster
-#Run this all in ipython: %run new_var_vis
+red_chi=new_var_vis('file_name')
+adjust_weights('file_name',red_chi)
