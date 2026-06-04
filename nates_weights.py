@@ -2,7 +2,7 @@ def new_var_vis(file,collapse=False):
     ''' Calculate the weight based on the variance in a visibility map at each u,v point and each channel. The codes estimate the variance among the 50 closest uv-points in a limited range in uv-space. 
 
     :param file:
-    Name of the visibility fits file for which the weights will be calculated. The file is assumed to contain a spectral line (ie. it contains a spectral dimension). Use var_vis_cont if you have continuum data that has been averaged along the spectral dimension.
+    Name of the visibility fits file for which the weights will be calculated. The file is assumed to contain a spectral line (ie. it contains a spectral dimension).
     
     :param collapse:
     Calculates the average across the spectral windows, rather than calculating an average in each spectral window separately. This is necessary if you are using line-free channels to calculate the dispersion.
@@ -17,8 +17,8 @@ def new_var_vis(file,collapse=False):
 
     chi = 0
     if collapse:
-        vis[:,:,2]*=vis[:,:,2]>0
-        chi += ((vis[i,0,0]**2)*vis[:,0,2]).sum() + ((vis[:,0,1]**2)*vis[:,0,2]).sum() + ((vis[:,1,0]**2)*vis[:,1,2]).sum() + ((vis[:,1,1]**2)*vis[:,1,2]).sum()
+        vis[:,:,2]*=vis[:,:,2]>0 #Set negatives to zero with mask
+        chi += ((vis[:,0,0]**2)*vis[:,0,2]).sum() + ((vis[:,0,1]**2)*vis[:,0,2]).sum() + ((vis[:,1,0]**2)*vis[:,1,2]).sum() + ((vis[:,1,1]**2)*vis[:,1,2]).sum()
         if len(vis[:,:,2].ravel()) > np.sum(vis[:,:,2]<=0): #Will happen with weights of zero as well, which usually are due to u or v =0 (unphysical points)
             print("Alert: Non-positive weights in data set")
         n_els=len(np.ravel(vis[:,:,2]>0))
@@ -30,7 +30,7 @@ def new_var_vis(file,collapse=False):
             print("Alert: Non-positive weights in data set")
         n_els=len(np.ravel(vis[:,:,:,2]>0))
 
-    red_chi = chi/(2*n_els)
+    red_chi = chi/(2*n_els) #n_els is # of weights >0, so with real and imag, 2*n_els
 
     return red_chi
 
@@ -47,15 +47,16 @@ def adjust_weights(file,red_chi,collapse=False):
     import numpy as np
 
     fits_file = fits.open(file)
+    
     if collapse:
-        fits_file[0].data['data'][:,0,0,0,:,2]*=fits_file[0].data['data'][:,0,0,0,:,2]>0
-        fits_file[0].data['data'][:,0,0,0,:,2]/=red_chi
+        fits_file[0].data['data'][...,2]*=fits_file[0].data['data'][...,2]>0
+        fits_file[0].data['data'][...,2]/=red_chi
     else:
-        fits_file[0].data['data'][:,0,0,0,:,:,2]*=fits_file[0].data['data'][:,0,0,0,:,:,2]>0
-        fits_file[0].data['data'][:,0,0,0,:,:,2]/=red_chi
+        fits_file[0].data['data'][...,2]*=fits_file[0].data['data'][...,2]>0
+        fits_file[0].data['data'][...,2]/=red_chi
     fits_file.writeto(file,overwrite=True)
     fits_file.close()
     
 
-red_chi=new_var_vis('file_name.fits')
-adjust_weights('file_name.fits',red_chi)
+red_chi=new_var_vis('file_name.uvfits')
+adjust_weights('file_name.uvfits',red_chi)
