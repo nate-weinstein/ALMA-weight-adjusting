@@ -39,9 +39,6 @@ def adjust_weights(file,red_chi):
 
     :param file:
     Name of the visibility fits file for which the weights will be calculated. The file is assumed to contain a spectral line (ie. it contains a spectral dimension).
-
-    :param collapse:
-    Calculates the average across the spectral windows, rather than calculating an average in each spectral window separately.
     '''
     from astropy.io import fits
     import numpy as np
