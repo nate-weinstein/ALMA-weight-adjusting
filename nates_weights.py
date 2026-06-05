@@ -19,8 +19,8 @@ def new_var_vis(file,collapse=False):
     if collapse:
         vis[:,:,2]*=vis[:,:,2]>0 #Set negatives to zero with mask
         chi += ((vis[:,0,0]**2)*vis[:,0,2]).sum() + ((vis[:,0,1]**2)*vis[:,0,2]).sum() + ((vis[:,1,0]**2)*vis[:,1,2]).sum() + ((vis[:,1,1]**2)*vis[:,1,2]).sum()
-        if len(vis[:,:,2].ravel()) > np.sum(vis[:,:,2]<=0): #Will happen with weights of zero as well, which usually are due to u or v =0 (unphysical points)
-            print("Alert: Non-positive weights in data set")
+        if len(vis[:,:,2].ravel()) > np.sum(vis[:,:,2]<=0):
+            print("Alert: Non-positive weights in data set") #Will happen with weights of zero as well, which usually are due to u or v =0 (unphysical points)
         n_els=len(np.ravel(vis[:,:,2]>0))
     else:
         vis[:,:,:,2]*=vis[:,:,:,2]>0
@@ -34,7 +34,7 @@ def new_var_vis(file,collapse=False):
 
     return red_chi
 
-def adjust_weights(file,red_chi,collapse=False):
+def adjust_weights(file,red_chi):
     ''' Scales the weights in given file by a factor of red_chi
 
     :param file:
@@ -48,12 +48,9 @@ def adjust_weights(file,red_chi,collapse=False):
 
     fits_file = fits.open(file)
     
-    if collapse:
-        fits_file[0].data['data'][...,2]*=fits_file[0].data['data'][...,2]>0
-        fits_file[0].data['data'][...,2]/=red_chi
-    else:
-        fits_file[0].data['data'][...,2]*=fits_file[0].data['data'][...,2]>0
-        fits_file[0].data['data'][...,2]/=red_chi
+    fits_file[0].data['data'][...,2]*=fits_file[0].data['data'][...,2]>0
+    fits_file[0].data['data'][...,2]/=red_chi
+
     fits_file.writeto(file,overwrite=True)
     fits_file.close()
     
